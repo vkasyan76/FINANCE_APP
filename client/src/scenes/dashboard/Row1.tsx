@@ -14,6 +14,8 @@ import {
   ResponsiveContainer,
   LineChart,
   Legend,
+  BarChart,
+  Bar,
 } from "recharts";
 
 const Row1 = () => {
@@ -41,6 +43,18 @@ const Row1 = () => {
           name: month.substring(0, 3),
           revenue: revenue,
           profit: (revenue - expenses).toFixed(2),
+        };
+      })
+    );
+  }, [data]);
+
+  const revenue = useMemo(() => {
+    return (
+      data &&
+      data[0].monthlyData.map(({ month, revenue }) => {
+        return {
+          name: month.substring(0, 3),
+          revenue: revenue,
         };
       })
     );
@@ -185,7 +199,72 @@ const Row1 = () => {
           </LineChart>
         </ResponsiveContainer>
       </DashboardBox>
-      <DashboardBox bgcolor="#fff" gridArea="c"></DashboardBox>
+
+      {/* CHART 3 */}
+
+      <DashboardBox bgcolor="#fff" gridArea="c">
+        <BoxHeader
+          title="Monthly Revenue"
+          subtitle="graph representing the revenue month by month"
+          sideText="+4%"
+        />
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            width={500}
+            height={300}
+            data={revenue}
+            margin={{
+              top: 17,
+              right: 30,
+              left: -5,
+              bottom: 58,
+            }}
+          >
+            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
+            <defs>
+              <linearGradient id="colorRevenueBar" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={palette.primary[300]}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={palette.primary[300]}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              style={{ fontSize: "10px" }}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              style={{ fontSize: "10px" }}
+            />
+            <Tooltip />
+            <Legend
+              height={20}
+              wrapperStyle={{ margin: "0 0 10px 0" }}
+              formatter={(value, entry) => (
+                <span style={{ color: palette.grey[400] }}>{value}</span>
+              )}
+            />
+
+            <Bar
+              dataKey="revenue"
+              // type="monotone"
+              // stroke={palette.primary.main}
+              // fillOpacity={1}
+              fill="url(#colorRevenueBar)"
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </DashboardBox>
     </>
   );
 };
