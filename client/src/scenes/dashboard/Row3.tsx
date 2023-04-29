@@ -1,6 +1,10 @@
 import DashboardBox from "@/components/DashboardBox";
+import { useGetTransactionsQuery } from "@/state/api";
 
 const Row3 = () => {
+  const { data: transactionsData } = useGetTransactionsQuery();
+  console.log("data:", transactionsData);
+
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="g"></DashboardBox>
